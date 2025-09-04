@@ -16,6 +16,13 @@ public class Drone : Enemy {
     public float targetRadius = 200f;
 
     //Boid Steering/Flocking Variables
+    public float separationDistance = 25.0f;
+    public float cohesionDistance = 50.0f;
+    public float separationStrength = 250.0f;
+    public float cohesionStrength = 25.0f;
+    private Vector3 cohesionPos = new Vector3(0f, 0f, 0f);
+    private int boidIndex = 0;
+
 
     // Use this for initialization
     void Start() {
@@ -36,6 +43,14 @@ public class Drone : Enemy {
         if(target)
             MoveTowardsTarget();
 
+        //Boid cohesion/segregation
+        BoidBehaviour();
+        boidIndex++;
+        if(boidIndex >= gameManager.enemyList.Length)
+        {
+            Vector3 cohesiveForce = (cohesionStrength / Vector3.Distance(cohesionPos, transform.position)) * (cohesionPos - transform.position);
+        }
+
     }
 
     private void MoveTowardsTarget() {
@@ -49,6 +64,10 @@ public class Drone : Enemy {
 
             rb.AddRelativeForce(Vector3.forward * speed * 20 * Time.deltaTime);
         }
+    }
+
+    private void BoidBehaviour()
+    {
     }
 
 }
