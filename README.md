@@ -1,1 +1,1 @@
-# AIforGames2
+# AIforGames
