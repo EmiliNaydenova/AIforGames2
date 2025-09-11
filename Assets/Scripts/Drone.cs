@@ -49,6 +49,23 @@ public class Drone : Enemy {
         if(boidIndex >= gameManager.enemyList.Length)
         {
             Vector3 cohesiveForce = (cohesionStrength / Vector3.Distance(cohesionPos, transform.position)) * (cohesionPos - transform.position);
+            rb.AddForce(cohesiveForce);
+            boidIndex = 0;
+            cohesionPos.Set(0f, 0f, 0f);
+        }
+        Vector3 pos = gameManager.enemyList[boidIndex].transform.position;
+        Quaternion rot = gameManager.enemyList[boidIndex].transform.rotation;
+        float dist = Vector3.Distance(transform.position, pos);
+
+        if(dist>0f){
+            if(dist <= separationDistance){
+                float scale = separationStrength/dist;
+                rb.AddForce(scale*Vector3.Normalize(transform.position - pos));
+            }
+            else if(dist < cohesionDistance && dist > separationDistance){
+                cohesionPos = cohesionPos + pos*(1f/(float)gameManager.enemyList.Length);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, 1f);
+            }
         }
 
     }
